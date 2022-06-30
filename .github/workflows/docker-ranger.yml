@@ -67,7 +67,7 @@ jobs:
           distribution: temurin
           cache: maven
       - name: Build with Maven
-        run: export MAVEN_OPTS="-Xms2g -Xmx2g" && mvn -DskipTests=true -DskipDocs clean package
+        run: cd ranger && mvn -DskipTests=true -DskipDocs clean package
       - name: Log in to the Container registry
         uses: docker/login-action@v1.10.0
         with:
