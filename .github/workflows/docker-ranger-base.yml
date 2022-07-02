@@ -80,6 +80,7 @@ jobs:
         run: cd ranger/dev-support/ranger-docker
       - name: Build docker images
         run: |
+          cd ranger/dev-support/ranger-docker; \
           docker build \
           --no-cache \
           -f Dockerfile.ranger-base \
@@ -88,6 +89,7 @@ jobs:
           .
       - name: Push docker images
         run: |
+          cd ranger/dev-support/ranger-docker; \
           docker buildx build \
           --no-cache \
           --push \
