@@ -36,7 +36,7 @@ on:
           - latest
           - 2.3.0
 env:
-  HUB: ghcr.io/flowerfine/ranger
+  HUB: ghcr.io/flowerfine/ranger-base
   RANGER_BRANCH: ${{ inputs.rangerBranch }}
   RANGER_VERSION: ${{ inputs.rangerVersion }}
   DOCKER_BUILDKIT: 1
@@ -76,3 +76,14 @@ jobs:
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
+      - name: Set Working Directory
+        run: cd ranger/dev-support/ranger-docker
+      - name: Build ranger base images
+        run: |
+          cd ranger/dev-support/ranger-docker; \
+          docker-compose -f docker-compose.ranger-base.yml -f docker-compose.ranger-build.yml up
+      - name: Build ranger images
+        run: |
+          cd ranger/dev-support/ranger-docker; \
+          export RANGER_DB_TYPE=mysql; \
+          docker-compose -f docker-compose.ranger-base.yml -f docker-compose.ranger.yml -f docker-compose.ranger-${RANGER_DB_TYPE}.yml -f docker-compose.ranger-usersync.yml -f docker-compose.ranger-tagsync.yml up -d
